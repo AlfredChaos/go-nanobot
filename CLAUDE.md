@@ -44,13 +44,13 @@
 
 每个模块完成后，做一个简短的对比总结：
 
-| 维度 | nanobot (Python) | go-nanobot (Go) |
-|------|-------------------|-----------------|
-| 并发模型 | asyncio + Queue | goroutine + channel |
-| 接口定义 | ABC + 抽象方法 | interface |
-| 配置 | Pydantic BaseModel | ? |
-| 序列化 | dataclass + dict | ? |
-| 错误处理 | Exception | ? |
+| 维度     | nanobot (Python)   | go-nanobot (Go)     |
+| -------- | ------------------ | ------------------- |
+| 并发模型 | asyncio + Queue    | goroutine + channel |
+| 接口定义 | ABC + 抽象方法     | interface           |
+| 配置     | Pydantic BaseModel | ?                   |
+| 序列化   | dataclass + dict   | ?                   |
+| 错误处理 | Exception          | ?                   |
 
 引导学习者自己填写 Go 列。
 
@@ -66,18 +66,18 @@ Channel → MessageBus.inbound → AgentLoop → AgentRunner → LLM Provider
 
 ### 关键源码位置
 
-| 模块 | 文件 | 核心职责 |
-|------|------|----------|
-| 消息总线 | `nanobot/bus/queue.py` | 两个 `asyncio.Queue`（inbound/outbound），解耦 Channel 和 Agent |
-| 消息类型 | `nanobot/bus/events.py` | `InboundMessage`（channel/sender_id/chat/content）和 `OutboundMessage` |
-| Agent 循环 | `nanobot/agent/loop.py` | `AgentLoop` 管理会话 key、状态机（TurnState）、上下文构建 |
-| Agent 执行器 | `nanobot/agent/runner.py` | `AgentRunner` 执行多轮 LLM 对话，处理 tool call，流式返回 |
-| Tool 基类 | `nanobot/agent/tools/base.py` | `Tool` ABC：name/description/parameters/execute，JSON Schema 验证 |
-| Tool 注册 | `nanobot/agent/tools/registry.py` | `ToolRegistry`：register/get/execute，支持动态发现 |
-| Provider 基类 | `nanobot/providers/base.py` | `LLMProvider` ABC，`LLMResponse`/`ToolCallRequest` 数据类 |
-| Channel 基类 | `nanobot/channels/base.py` | `BaseChannel` ABC：login/run/send，持有 MessageBus 引用 |
-| 配置 | `nanobot/config/schema.py` | Pydantic BaseModel，支持 camelCase alias |
-| 设计约束 | `.agent/design.md` | "核心保持小，边缘扩展"、"宁可重复也不过早抽象" |
+| 模块          | 文件                              | 核心职责                                                               |
+| ------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| 消息总线      | `nanobot/bus/queue.py`            | 两个 `asyncio.Queue`（inbound/outbound），解耦 Channel 和 Agent        |
+| 消息类型      | `nanobot/bus/events.py`           | `InboundMessage`（channel/sender_id/chat/content）和 `OutboundMessage` |
+| Agent 循环    | `nanobot/agent/loop.py`           | `AgentLoop` 管理会话 key、状态机（TurnState）、上下文构建              |
+| Agent 执行器  | `nanobot/agent/runner.py`         | `AgentRunner` 执行多轮 LLM 对话，处理 tool call，流式返回              |
+| Tool 基类     | `nanobot/agent/tools/base.py`     | `Tool` ABC：name/description/parameters/execute，JSON Schema 验证      |
+| Tool 注册     | `nanobot/agent/tools/registry.py` | `ToolRegistry`：register/get/execute，支持动态发现                     |
+| Provider 基类 | `nanobot/providers/base.py`       | `LLMProvider` ABC，`LLMResponse`/`ToolCallRequest` 数据类              |
+| Channel 基类  | `nanobot/channels/base.py`        | `BaseChannel` ABC：login/run/send，持有 MessageBus 引用                |
+| 配置          | `nanobot/config/schema.py`        | Pydantic BaseModel，支持 camelCase alias                               |
+| 设计约束      | `.agent/design.md`                | "核心保持小，边缘扩展"、"宁可重复也不过早抽象"                         |
 
 ### 设计约束（来自 `.agent/design.md`）
 
@@ -93,7 +93,7 @@ Channel → MessageBus.inbound → AgentLoop → AgentRunner → LLM Provider
 - 测试文件与源文件同目录（`_test.go`）
 - 使用 `go fmt` / `go vet` / `golangci-lint`
 - 错误处理：不丢弃 error，用 `%w` 包装保留链
-- 注释用英文，解释 *why* 而非 *what*
+- 注释用中文，解释 *why* 而非 *what*
 
 ## 参考源码
 
